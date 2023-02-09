@@ -188,12 +188,35 @@ void GameScene::Update()
 	//	debugText.Print(spherestr.str(), 50, 280, 1.0f);
 	//}
 
-	//レイと三角形の当たり判定
+	////レイと三角形の当たり判定
+	//XMVECTOR inter;
+	//float distance;
+	//bool hit = Collision::CheckRay2Triangle(ray, triangle, &distance, &inter);
+	//if (hit) {
+	//	debugText.Print("HIT", 50, 200, 1.0f);
+	//	//stringstreamをリセットし、交点座標を埋め込む
+	//	rayster.str("");
+	//	rayster.clear();
+	//	rayster << "("
+	//		<< std::fixed << std::setprecision(2)//小数点以下2まで
+	//		<< inter.m128_f32[0] << ","//x
+	//		<< inter.m128_f32[1] << ","//y
+	//		<< inter.m128_f32[2] << ")";//z
+	//	debugText.Print(rayster.str(), 50, 240, 1.0f);
+
+	//	rayster.str("");
+	//	rayster.clear();
+	//	rayster << "distance:(" << std::fixed << std::setprecision(2) << distance << ")";
+
+	//	debugText.Print(rayster.str(), 50, 260, 1.0f);
+	//}
+
+	//レイと球の当たり判定
 	XMVECTOR inter;
 	float distance;
-	bool hit = Collision::CheckRay2Triangle(ray, triangle, &distance, &inter);
+	bool hit = Collision::CheckRay2Sphere(ray, sphere, &distance, &inter);
 	if (hit) {
-		debugText.Print("HIT", 50, 200, 1.0f);
+		debugText.Print("HIT", 50, 260, 1.0f);
 		//stringstreamをリセットし、交点座標を埋め込む
 		rayster.str("");
 		rayster.clear();
@@ -202,16 +225,14 @@ void GameScene::Update()
 			<< inter.m128_f32[0] << ","//x
 			<< inter.m128_f32[1] << ","//y
 			<< inter.m128_f32[2] << ")";//z
-		debugText.Print(rayster.str(), 50, 240, 1.0f);
+		debugText.Print(rayster.str(), 50, 280, 1.0f);
 
 		rayster.str("");
 		rayster.clear();
 		rayster << "distance:(" << std::fixed << std::setprecision(2) << distance << ")";
 
-		debugText.Print(rayster.str(), 50, 260, 1.0f);
+		debugText.Print(rayster.str(), 50, 300, 1.0f);
 	}
-
-
 
 }
 
