@@ -552,7 +552,6 @@ void GameScene::Draw()
 		}
 		break;
 	case GameScene::sphereRayTriangle:
-		sphereRed->Draw();
 		triangleObj->Draw();
 		hit = Collision::CheckRay2Sphere(ray, sphere, &distance, &inter);
 
