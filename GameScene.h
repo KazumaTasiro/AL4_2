@@ -103,7 +103,9 @@ class GameScene {
 		rayPlane,
 		raySphere,
 		sphereTriangle,
-		rayTriangle
+		rayTriangle,
+		sphereRayTriangle
+
 
 	};
 

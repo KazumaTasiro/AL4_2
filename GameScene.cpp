@@ -153,6 +153,9 @@ void GameScene::Update()
 		if (input->PushKey(DIK_5)) {
 			Switch = rayTriangle;
 		}
+		if (input->PushKey(DIK_6)) {
+			Switch = sphereRayTriangle;
+		}
 
 		//球移動
 		{
@@ -183,6 +186,9 @@ void GameScene::Update()
 		if (input->PushKey(DIK_5)) {
 			Switch = rayTriangle;
 		}
+		if (input->PushKey(DIK_6)) {
+			Switch = sphereRayTriangle;
+		}
 		//レイ操作
 		
 		if (input->PushKey(DIK_UP)) { ray.start += moveY; }
@@ -210,6 +216,9 @@ void GameScene::Update()
 		if (input->PushKey(DIK_5)) {
 			Switch = rayTriangle;
 		}
+		if (input->PushKey(DIK_6)) {
+			Switch = sphereRayTriangle;
+		}
 
 		//レイ操作
 		
@@ -235,6 +244,9 @@ void GameScene::Update()
 		}
 		if (input->PushKey(DIK_5)) {
 			Switch = rayTriangle;
+		}
+		if (input->PushKey(DIK_6)) {
+			Switch = sphereRayTriangle;
 		}
 		//球移動
 	{
@@ -266,6 +278,9 @@ void GameScene::Update()
 		if (input->PushKey(DIK_4)) {
 			Switch = sphereTriangle;
 		}
+		if (input->PushKey(DIK_6)) {
+			Switch = sphereRayTriangle;
+		}
 		//レイ操作
 
 		if (input->PushKey(DIK_UP)) { ray.start += moveY; }
@@ -278,6 +293,49 @@ void GameScene::Update()
 		objRay->SetPosition({ ray.start.m128_f32[0],ray.start.m128_f32[1] ,ray.start.m128_f32[2] });
 		objRay2->SetPosition({ ray.start.m128_f32[0],ray.start.m128_f32[1] ,ray.start.m128_f32[2] });
 		break;
+	case GameScene::sphereRayTriangle:
+		if (input->PushKey(DIK_1)) {
+			Switch = sphereVer;
+		}
+		if (input->PushKey(DIK_2)) {
+			Switch = rayPlane;
+		}
+		if (input->PushKey(DIK_3)) {
+			Switch = raySphere;
+		}
+		if (input->PushKey(DIK_4)) {
+			Switch = sphereTriangle;
+		}
+		if (input->PushKey(DIK_5)) {
+			Switch = rayTriangle;
+		}
+		//レイ操作
+
+		if (input->PushKey(DIK_UP)) { ray.start += moveY; }
+		else if (input->PushKey(DIK_DOWN)) { ray.start -= moveY; }
+
+
+		if (input->PushKey(DIK_RIGHT)) { ray.start += moveX; }
+		else if (input->PushKey(DIK_LEFT)) { ray.start -= moveX; }
+
+		objRay->SetPosition({ ray.start.m128_f32[0],ray.start.m128_f32[1] ,ray.start.m128_f32[2] });
+		objRay2->SetPosition({ ray.start.m128_f32[0],ray.start.m128_f32[1] ,ray.start.m128_f32[2] });
+		//球移動
+		{
+			XMVECTOR moveY = XMVectorSet(0, 0.01f, 0, 0);
+			if (input->PushKey(DIK_W))
+			{
+				sphere.center += moveY;
+			}
+			else if (input->PushKey(DIK_S)) { sphere.center -= moveY; }
+
+			XMVECTOR moveX = XMVectorSet(0.01f, 0, 0, 0);
+			if (input->PushKey(DIK_D)) { sphere.center += moveX; }
+			else if (input->PushKey(DIK_A)) { sphere.center -= moveX; }
+		}
+		objSphere->SetPosition({ sphere.center.m128_f32[0],sphere.center.m128_f32[1] ,sphere.center.m128_f32[2] });
+		objSphere2->SetPosition({ sphere.center.m128_f32[0],sphere.center.m128_f32[1] ,sphere.center.m128_f32[2] });
+
 	}
 
 
@@ -427,6 +485,8 @@ void GameScene::Draw()
 	Object3d::PreDraw(cmdList);
 	XMVECTOR inter;
 	float distance;
+	XMVECTOR inter2;
+	float distance2;
 	switch (Switch)
 	{
 	case GameScene::sphereVer:
@@ -483,6 +543,28 @@ void GameScene::Draw()
 	case GameScene::rayTriangle:
 		triangleObj->Draw();
 		hit = Collision::CheckRay2Triangle(ray, triangle, &distance, &inter);
+		if (hit) {
+			objRay2->Draw();
+		}
+		else
+		{
+			objRay->Draw();
+		}
+		break;
+	case GameScene::sphereRayTriangle:
+		sphereRed->Draw();
+		triangleObj->Draw();
+		hit = Collision::CheckRay2Sphere(ray, sphere, &distance, &inter);
+
+		if (hit) {
+			objSphere2->Draw();
+		}
+		else
+		{
+			objSphere->Draw();
+		}
+		
+		hit = Collision::CheckRay2Triangle(ray, triangle, &distance2, &inter2);
 		if (hit) {
 			objRay2->Draw();
 		}
