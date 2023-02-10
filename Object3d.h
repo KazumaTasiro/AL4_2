@@ -8,6 +8,9 @@
 #include <string>
 #include "Model.h"
 #include "Camera.h"
+#include "CollisionInfo.h"
+
+class BaceCollider;
 
 /// <summary>
 /// 3Dオブジェクト
@@ -90,16 +93,50 @@ private: // 静的メンバ変数
 	static Camera* sCamera_;
 
 public: // メンバ関数
-	bool Initialize();
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	Object3d() = default;
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	virtual ~Object3d();
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <returns>成否</returns>
+	virtual bool Initialize();
+
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
-	void Update();
+	virtual void Update();
 
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw();
+	virtual void Draw();
+
+	/// <summary>
+	/// ワールド行列の取得
+	/// </summary>
+	/// <returns>ワールド行列</returns>
+	const XMMATRIX& GetMatWorld() { return matWorld; }
+
+	/// <summary>
+	/// コライダーのセット
+	/// </summary>
+	/// <param name="collider">コライダー</param>
+	void SetCollider(BaseCollider* collider);
+
+	/// <summary>
+	/// 衝突時コールバック関数
+	/// </summary>
+	/// <param name="info">衝突情報</param>
+	virtual void OnCollision(const CollisionInfo& info) {}
+
 
 	/// <summary>
 	/// 座標の取得
@@ -129,7 +166,12 @@ public: // メンバ関数
 
 	void SetBillboard(bool isBillboard) { this->isBillboard = isBillboard; }
 
-private: // メンバ変数
+protected: // メンバ変数
+	const char* name = nullptr;
+
+	// コライダー
+	BaseCollider* collider = nullptr;
+
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
 	// 色
 	XMFLOAT4 color = { 1,1,1,1 };

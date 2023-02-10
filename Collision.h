@@ -38,6 +38,16 @@ public:
 	static bool CheckSphere2Triangle(const Sphere& sphere, const Triangle& triangle, DirectX::XMVECTOR* inter = nullptr);
 
 	/// <summary>
+	/// 球と球の当たり判定
+	/// </summary>
+	/// <param name="sphereA">球A</param>
+	/// <param name="sphereB">球B</param>
+	/// <param name="inter">交点（出力用）</param>
+	/// <param name="reject">排斥ベクトル（出力用）</param>
+	/// <returns></returns>
+	static bool CheckSphere2Sphere(const Sphere& sphereA, const Sphere& sphereB, DirectX::XMVECTOR* inter = nullptr, DirectX::XMVECTOR* reject = nullptr);
+
+	/// <summary>
 	/// レイと平面の当たり判定
 	/// </summary>
 	/// <param name="lay">レイ</param>

@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include "BaseCollider.h"
 
 #pragma comment(lib, "d3dcompiler.lib")
 
@@ -205,6 +206,13 @@ Object3d* Object3d::Create() {
 	return object3d;
 }
 
+Object3d::~Object3d()
+{
+	if (collider) {
+		delete collider;
+	}
+}
+
 bool Object3d::Initialize() {
 	// nullptrチェック
 	assert(device);
@@ -225,6 +233,9 @@ bool Object3d::Initialize() {
 	// 定数バッファのマッピング
 	result = constBuffB0->Map(0, nullptr, (void**)&constMap);
 	assert(SUCCEEDED(result));
+
+	//クラス名の文字列を取得
+	name = typeid(*this).name();
 
 	return true;
 }
@@ -268,6 +279,11 @@ void Object3d::Update() {
 
 	// 定数バッファへデータ転送
 	constMap->mat = matWorld * matViewProjection; // 行列の合成
+	
+
+	if (collider) {
+		collider->Update();
+	}
 }
 
 void Object3d::Draw() {
@@ -289,4 +305,10 @@ void Object3d::Draw() {
 
 	// モデル描画
 	model->Draw(sCommandList);
+}
+
+void Object3d::SetCollider(BaseCollider* collider)
+{
+	collider->SetObject(this);
+	this->collider = collider;
 }

@@ -66,12 +66,28 @@ class GameScene {
 	Model* modelGround = nullptr;
 	Model* modelFighter = nullptr;
 
+	Model* rayModel = nullptr;
+	Model* rayModel2 = nullptr;
+	Model* sphereModel = nullptr;
+	Model* sphereModel2 = nullptr;
+	Model* triangleModel = nullptr;
+
 	Object3d* objSkydome = nullptr;
 	Object3d* objGround = nullptr;
 	Object3d* objFighter = nullptr;
 
+	Object3d* objSphere = nullptr;
+	Object3d* objSphere2 = nullptr;
+	Object3d* objRay = nullptr;
+	Object3d* objRay2 = nullptr;
+
+	Object3d* sphereRed = nullptr;
+	Object3d* triangleObj = nullptr;
+
 	//当たり判定　球
 	Sphere sphere;
+
+	Sphere sphereWhite;
 	//当たり判定　平面
 	Plane plane;
 	//当たり判定　三角形
@@ -79,4 +95,17 @@ class GameScene {
 	//当たり判定　レイ
 	Ray ray;
 
+	bool hit = false;
+
+	enum CollisionSwitch
+	{
+		sphereVer,
+		rayPlane,
+		raySphere,
+		sphereTriangle,
+		rayTriangle
+
+	};
+
+	CollisionSwitch Switch = CollisionSwitch::sphereVer;
 };

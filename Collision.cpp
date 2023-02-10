@@ -117,6 +117,37 @@ bool Collision::CheckSphere2Triangle(const Sphere& sphere, const Triangle& trian
 	return true;
 }
 
+bool Collision::CheckSphere2Sphere(const Sphere& sphereA, const Sphere& sphereB, DirectX::XMVECTOR* inter, DirectX::XMVECTOR* reject)
+{
+	// 中心点の距離の２乗 <= 半径の和の２乗　なら交差
+	XMVECTOR tmp;
+	tmp = sphereA.center - sphereB.center;
+	float dist = XMVector3Dot(tmp, tmp).m128_f32[0];
+	float radius2 = sphereA.radius + sphereB.radius;
+	radius2 *= radius2;
+
+	if (dist <= radius2)
+	{
+		if (inter)
+		{
+			// Aの半径が0の時座標はBの中心　Bの半径が0の時座標はAの中心　となるよう補完
+			float t = sphereB.radius / (sphereA.radius + sphereB.radius);
+			*inter = XMVectorLerp(sphereA.center, sphereB.center, t);
+		}
+		// 押し出すベクトルを計算
+		if (reject)
+		{
+			float rejectLen = sphereA.radius + sphereB.radius - sqrtf(dist);
+			tmp = sphereA.center - sphereB.center;
+			*reject = XMVector3Normalize(tmp);
+			*reject *= rejectLen;
+		}
+		return true;
+	}
+
+	return false;
+}
+
 bool Collision::CheckRay2Plane(const Ray& ray, const Plane& plane, float* distance, DirectX::XMVECTOR* inter)
 {
 	const float epsilon = 1.0e-5f;	// 誤差吸収用の微小な値
